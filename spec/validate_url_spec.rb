@@ -243,4 +243,15 @@ describe "URL validation" do
     end
 
   end
+
+  context "with no spaces" do
+    before do
+      @user = UserWithNoSpaces.new
+    end
+
+    it "should allow a valid internet url" do
+      @user.homepage = "http://www.exa mple.com"
+      @user.should_not be_valid
+    end
+  end
 end
