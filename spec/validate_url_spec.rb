@@ -56,7 +56,7 @@ describe "URL validation" do
       @user.homepage = "http://"
       @user.should_not be_valid
     end
-    
+
     it "should not allow a url without a host" do
       @user.homepage = "http:/"
       @user.should_not be_valid
@@ -242,6 +242,11 @@ describe "URL validation" do
       @user.should be_valid
     end
 
+    it "should allow any internet url schem" do
+      @user.homepage = "git://git.example.com"
+      @user.should be_valid
+    end
+
   end
 
   context "with no spaces" do
@@ -249,8 +254,13 @@ describe "URL validation" do
       @user = UserWithNoSpaces.new
     end
 
-    it "should allow a valid internet url" do
+    it "should not allow domain names with spaces" do
       @user.homepage = "http://www.exa mple.com"
+      @user.should_not be_valid
+    end
+
+    it "should allow a valid TLD with spaces" do
+      @user.homepage = "http://www.example.co m"
       @user.should_not be_valid
     end
   end
