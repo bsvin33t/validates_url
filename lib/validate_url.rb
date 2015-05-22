@@ -12,6 +12,7 @@ module ActiveModel
         options.reverse_merge!(:schemes => %w(http https))
         options.reverse_merge!(:message => :url)
         options.reverse_merge!(:no_local => false)
+        options.reverse_merge!(:no_scheme => false)
 
         super(options)
       end
@@ -19,7 +20,7 @@ module ActiveModel
       def validate_each(record, attribute, value)
         schemes = [*options.fetch(:schemes)].map(&:to_s)
         begin
-          uri = Addressable::URI.parse(value)
+          uri = options.fetch(:no_scheme) ? Addressable::URI.heuristic_parse(value) : Addressable::URI.parse(value)
           unless uri && uri.host && schemes.include?(uri.scheme) && (!options.fetch(:no_local) || uri.host.include?('.'))
             record.errors.add(attribute, options.fetch(:message), :value => value)
           end

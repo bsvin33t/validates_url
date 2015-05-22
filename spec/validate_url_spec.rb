@@ -231,4 +231,16 @@ describe "URL validation" do
       @user.errors[:homepage].should == ["wrong"]
     end
   end
+
+  context "with no scheme" do
+    before do
+      @user = UserWithNoScheme.new
+    end
+
+    it "should allow a valid internet url without scheme" do
+      @user.homepage = "example.com"
+      @user.should be_valid
+    end
+
+  end
 end
